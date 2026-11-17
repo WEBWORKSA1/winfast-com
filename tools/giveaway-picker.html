@@ -1,0 +1,51 @@
+---
+layout: default
+title: "Giveaway Winner Picker — Free, Provably Fair Random Draw | WinFast.com"
+description: "Free giveaway winner picker: paste names or comments, remove duplicates, filter by keyword, draw multiple winners and alternates with crypto randomness and a SHA-256 draw certificate."
+canonical: "https://winfast.com/tools/giveaway-picker.html"
+root: "../"
+og_type: website
+---
+{% raw %}<section class="page-head"><div class="wrap"><div class="crumbs"><a href="../index.html">Home</a> / <a href="index.html">Tools</a></div><span class="eyebrow">Free tool · no sign-up</span><h1>Giveaway Winner Picker</h1><p>Paste entries, filter duplicates, draw winners and alternates with cryptographic randomness — then download a draw certificate.</p></div></section><section class="section"><div class="wrap"><div class="tool"><div class="card"><div class="form">
+<div class="field"><label for="gp-list">Entries — one per line (names, emails, @handles or pasted comments)</label><textarea id="gp-list" rows="12" placeholder="@alex — love this!
+@sam — count me in
+@priya — tagging @friend"></textarea></div>
+<div class="row"><div class="field"><label for="gp-n">Winners</label><input id="gp-n" type="number" min="1" value="1"></div><div class="field"><label for="gp-alt">Alternates</label><input id="gp-alt" type="number" min="0" value="1"></div></div>
+<div class="row"><div class="field"><label for="gp-kw">Must contain (optional)</label><input id="gp-kw" placeholder="e.g. #giveaway"></div><div class="field"><label for="gp-ex">Exclude (comma-separated)</label><input id="gp-ex" placeholder="@mybrand, test"></div></div>
+<label class="check"><input type="checkbox" id="gp-dedupe" checked> Remove duplicates (one entry per person — first word / @handle)</label>
+<label class="check"><input type="checkbox" id="gp-title"> Treat the first word of each line as the entrant (for pasted comments)</label>
+<button class="btn btn-lime" id="gp-go">🎯 Draw winners</button></div></div>
+<div class="card"><div class="winner-card" id="gp-out"><p class="dim">Your winners will appear here.</p><div class="result" id="gp-flash">—</div></div><div id="gp-stats" class="muted" style="margin-top:14px"></div><div id="gp-cert-wrap" style="display:none;margin-top:14px"><button class="btn btn-ghost btn-sm" id="gp-cert">⬇ Download draw certificate</button> <button class="btn btn-ghost btn-sm" id="gp-copy">Copy results</button></div></div></div><div class="ad-zone"></div><h2 style="margin-top:40px">FAQ</h2><details><summary>Is this giveaway picker really random?</summary><p>Yes. It uses the browser's cryptographically secure Web Crypto API with rejection sampling, so every eligible entry has exactly the same probability.</p></details><details><summary>Do you store my entries?</summary><p>No. Everything runs in your browser; entries are never uploaded to WinFast.com.</p></details><details><summary>How do I prove my draw was fair?</summary><p>Download the draw certificate. It records the time, filters, eligible count, winners, alternates and a SHA-256 fingerprint of the final list so anyone with the same list can verify it was not changed.</p></details><details><summary>Can I pick winners from Instagram or YouTube comments?</summary><p>Yes — export or copy the comments, paste them one per line, and enable 'Treat the first word as the entrant' to dedupe by @handle.</p></details><div class="leadbox" style="margin-top:40px"><div><span class="eyebrow">For brands &amp; creators</span><h2 style="color:#fff">Running a giveaway? Let us fill it with real entrants.</h2><p>Feature your promotion to WinFast readers and Win Alerts subscribers, or let our team run the whole campaign — rules, landing page, fair draw and winner follow-up.</p></div><div class="center"><a class="btn btn-lime" href="../promote.html">See promotion packages →</a><p class="dim" style="margin-top:10px;font-size:.9rem">Free listings available</p></div></div></div></section><script>document.addEventListener('DOMContentLoaded',function(){
+function rnd(n){ // unbiased crypto integer in [0,n)
+  var max=Math.floor(4294967296/n)*n, b=new Uint32Array(1);
+  do{crypto.getRandomValues(b);}while(b[0]>=max);
+  return b[0]%n;
+}
+var cert="";
+function entrant(line,first){ line=line.trim(); if(!first) return line; var m=line.match(/^@?[\w.\-]+/); return m?m[0]:line; }
+document.getElementById('gp-go').onclick=async function(){
+  var raw=document.getElementById('gp-list').value.split(/\r?\n/).map(function(s){return s.trim();}).filter(Boolean);
+  var kw=document.getElementById('gp-kw').value.trim().toLowerCase();
+  var ex=document.getElementById('gp-ex').value.split(',').map(function(s){return s.trim().toLowerCase();}).filter(Boolean);
+  var first=document.getElementById('gp-title').checked, dd=document.getElementById('gp-dedupe').checked;
+  var list=raw.filter(function(l){var x=l.toLowerCase(); if(kw&&x.indexOf(kw)<0) return false; return !ex.some(function(e){return x.indexOf(e)>-1;});}).map(function(l){return entrant(l,first);});
+  if(dd){var seen={}; list=list.filter(function(n){var k=n.toLowerCase(); if(seen[k]) return false; seen[k]=1; return true;});}
+  var n=Math.max(1,+document.getElementById('gp-n').value||1), a=Math.max(0,+document.getElementById('gp-alt').value||0);
+  var out=document.getElementById('gp-out');
+  if(list.length<n){out.innerHTML='<p class="dim">Not enough eligible entries ('+list.length+') for '+n+' winner(s).</p>';return;}
+  var pool=list.slice(), picks=[]; for(var i=0;i<Math.min(n+a,pool.length);i++){var j=rnd(pool.length); picks.push(pool.splice(j,1)[0]);}
+  var flash=0, t=setInterval(function(){out.innerHTML='<div class="result">'+WF.esc(list[rnd(list.length)])+'</div>'; if(++flash>18){clearInterval(t); show();}},70);
+  var buf=new TextEncoder().encode(list.join('\n')); var h=await crypto.subtle.digest('SHA-256',buf);
+  var hash=Array.from(new Uint8Array(h)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');
+  function show(){
+    var w=picks.slice(0,n), al=picks.slice(n);
+    out.innerHTML='<p class="dim">🏆 Winner'+(n>1?'s':'')+'</p>'+w.map(function(x,i){return '<div class="result">'+(n>1?(i+1)+'. ':'')+WF.esc(x)+'</div>';}).join('')+(al.length?'<p class="dim" style="margin-top:14px">Alternates: '+al.map(WF.esc).join(', ')+'</p>':'');
+    var ts=new Date().toISOString();
+    document.getElementById('gp-stats').innerHTML='Raw lines: <b>'+raw.length+'</b> · Eligible entries: <b>'+list.length+'</b> · Drawn: '+ts+'<br>List fingerprint (SHA-256): <code style="font-size:.75rem;word-break:break-all">'+hash+'</code>';
+    cert='WinFast.com Draw Certificate\nDrawn at: '+ts+'\nRandomness: Web Crypto API (crypto.getRandomValues) with rejection sampling\nRaw lines: '+raw.length+'\nEligible entries: '+list.length+'\nFilters: must contain ['+kw+'] exclude ['+ex.join(', ')+'] dedupe='+dd+'\nEntry list SHA-256: '+hash+'\n\nWINNERS:\n'+w.map(function(x,i){return (i+1)+'. '+x;}).join('\n')+'\n\nALTERNATES:\n'+(al.join('\n')||'none')+'\n';
+    document.getElementById('gp-cert-wrap').style.display='block';
+  }
+};
+document.getElementById('gp-cert').onclick=function(){var b=new Blob([cert],{type:'text/plain'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='winfast-draw-certificate.txt';a.click();};
+document.getElementById('gp-copy').onclick=function(){navigator.clipboard&&navigator.clipboard.writeText(cert);this.textContent='Copied ✓';};
+});</script>{% endraw %}

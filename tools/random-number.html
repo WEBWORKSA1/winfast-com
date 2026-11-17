@@ -1,0 +1,23 @@
+---
+layout: default
+title: "Random Number Generator — Unique, Sorted, Crypto-Secure | WinFast.com"
+description: "Free cryptographically secure random number generator with ranges, unique numbers, sorting and copy. Perfect for raffle draws and numbered giveaway entries."
+canonical: "https://winfast.com/tools/random-number.html"
+root: "../"
+og_type: website
+---
+{% raw %}<section class="page-head"><div class="wrap"><div class="crumbs"><a href="../index.html">Home</a> / <a href="index.html">Tools</a></div><span class="eyebrow">Free tool · no sign-up</span><h1>Random Number Generator</h1><p>Generate one or many random numbers in any range — unique or with repeats — ideal for raffle tickets and numbered entries.</p></div></section><section class="section"><div class="wrap"><div class="tool"><div class="card form"><div class="row"><div class="field"><label for="rn-min">Min</label><input id="rn-min" type="number" value="1"></div><div class="field"><label for="rn-max">Max</label><input id="rn-max" type="number" value="100"></div></div>
+<div class="row"><div class="field"><label for="rn-c">How many</label><input id="rn-c" type="number" value="1" min="1" max="10000"></div><div class="field"><label for="rn-s">Sort</label><select id="rn-s"><option value="">No</option><option value="a">Ascending</option><option value="d">Descending</option></select></div></div>
+<label class="check"><input type="checkbox" id="rn-u" checked> Unique numbers (no repeats)</label><button class="btn btn-lime" id="rn-go">Generate</button></div>
+<div class="card"><div class="winner-card"><div class="result" id="rn-out">—</div></div><button class="btn btn-ghost btn-sm" style="margin-top:12px" id="rn-copy">Copy</button></div></div><div class="ad-zone"></div><h2 style="margin-top:40px">FAQ</h2><details><summary>Is it truly random?</summary><p>It uses the Web Crypto API, a cryptographically secure source, with rejection sampling to avoid bias.</p></details><details><summary>Can I draw raffle ticket numbers?</summary><p>Yes — set the min and max to your ticket range, choose how many winners, and keep 'unique' checked.</p></details><div class="leadbox" style="margin-top:40px"><div><span class="eyebrow">For brands &amp; creators</span><h2 style="color:#fff">Running a giveaway? Let us fill it with real entrants.</h2><p>Feature your promotion to WinFast readers and Win Alerts subscribers, or let our team run the whole campaign — rules, landing page, fair draw and winner follow-up.</p></div><div class="center"><a class="btn btn-lime" href="../promote.html">See promotion packages →</a><p class="dim" style="margin-top:10px;font-size:.9rem">Free listings available</p></div></div></div></section><script>document.addEventListener('DOMContentLoaded',function(){
+function rnd(n){ // unbiased crypto integer in [0,n)
+  var max=Math.floor(4294967296/n)*n, b=new Uint32Array(1);
+  do{crypto.getRandomValues(b);}while(b[0]>=max);
+  return b[0]%n;
+}
+document.getElementById('rn-go').onclick=function(){var a=Math.ceil(+document.getElementById('rn-min').value),b=Math.floor(+document.getElementById('rn-max').value),c=Math.max(1,+document.getElementById('rn-c').value||1),u=document.getElementById('rn-u').checked,s=document.getElementById('rn-s').value,o=document.getElementById('rn-out');
+ if(b<a){o.textContent='Max must be ≥ min';return;} var span=b-a+1; if(u&&c>span){o.textContent='Range too small for '+c+' unique numbers';return;}
+ var res=[],seen={}; while(res.length<c){var v=a+rnd(span); if(u){if(seen[v])continue;seen[v]=1;} res.push(v);}
+ if(s==='a')res.sort(function(x,y){return x-y;}); if(s==='d')res.sort(function(x,y){return y-x;}); o.textContent=res.join(', ');};
+document.getElementById('rn-copy').onclick=function(){navigator.clipboard&&navigator.clipboard.writeText(document.getElementById('rn-out').textContent);this.textContent='Copied ✓';};
+});</script>{% endraw %}

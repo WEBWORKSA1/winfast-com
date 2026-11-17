@@ -1,0 +1,37 @@
+---
+layout: default
+title: "Spin the Wheel — Free Random Name Picker Wheel | WinFast.com"
+description: "Free spin the wheel random name picker. Add entries, spin with cryptographic randomness, remove winners, and keep a results history."
+canonical: "https://winfast.com/tools/spin-wheel.html"
+root: "../"
+og_type: website
+---
+{% raw %}<section class="page-head"><div class="wrap"><div class="crumbs"><a href="../index.html">Home</a> / <a href="index.html">Tools</a></div><span class="eyebrow">Free tool · no sign-up</span><h1>Spin the Wheel</h1><p>Add names or prizes, spin, and optionally remove each winner. Great for live giveaways, classrooms and team decisions.</p></div></section><section class="section"><div class="wrap"><div class="tool"><div class="card"><div class="wheel-wrap"><div class="wheel-pointer"></div><canvas id="wh" width="560" height="560" aria-label="Prize wheel"></canvas></div><div class="center" style="margin-top:16px"><button class="btn btn-lime" id="wh-spin">🎡 Spin</button></div><div class="winner-card" style="margin-top:16px"><p class="dim">Result</p><div class="result" id="wh-res">—</div></div></div>
+<div class="card form"><div class="field"><label for="wh-list">Entries (one per line)</label><textarea id="wh-list" rows="10">Alex
+Sam
+Priya
+Jordan
+Mei
+Diego
+Fatima
+Noah</textarea></div><label class="check"><input type="checkbox" id="wh-rm"> Remove winner after each spin</label><button class="btn btn-ghost btn-sm" id="wh-shuffle">Shuffle</button><h3 style="margin-top:10px">History</h3><ol id="wh-hist" class="muted"></ol></div></div><div class="ad-zone"></div><h2 style="margin-top:40px">FAQ</h2><details><summary>Is the wheel fair?</summary><p>The winning segment is chosen first with cryptographic randomness; the animation then lands on it. Every entry has equal odds.</p></details><details><summary>Can I use it on a livestream?</summary><p>Yes — open the page full-screen and capture the browser window in OBS or similar software.</p></details><details><summary>How many entries can I add?</summary><p>Any number, but labels get small above ~60 entries. For large giveaways use the Giveaway Winner Picker.</p></details><div class="leadbox" style="margin-top:40px"><div><span class="eyebrow">For brands &amp; creators</span><h2 style="color:#fff">Running a giveaway? Let us fill it with real entrants.</h2><p>Feature your promotion to WinFast readers and Win Alerts subscribers, or let our team run the whole campaign — rules, landing page, fair draw and winner follow-up.</p></div><div class="center"><a class="btn btn-lime" href="../promote.html">See promotion packages →</a><p class="dim" style="margin-top:10px;font-size:.9rem">Free listings available</p></div></div></div></section><script>document.addEventListener('DOMContentLoaded',function(){
+function rnd(n){ // unbiased crypto integer in [0,n)
+  var max=Math.floor(4294967296/n)*n, b=new Uint32Array(1);
+  do{crypto.getRandomValues(b);}while(b[0]>=max);
+  return b[0]%n;
+}
+var cv=document.getElementById('wh'),cx=cv.getContext('2d'),ang=0,spinning=false,cols=['#c6f432','#4cc9f0','#9b8cff','#ff6b5b','#ffd166','#3ddc97','#f78fb3','#70a1ff'];
+function items(){return document.getElementById('wh-list').value.split(/\r?\n/).map(function(s){return s.trim();}).filter(Boolean);}
+function draw(){var it=items(),n=Math.max(it.length,1),r=cv.width/2,seg=2*Math.PI/n;cx.clearRect(0,0,cv.width,cv.height);
+ for(var i=0;i<n;i++){var a0=ang+i*seg-Math.PI/2;cx.beginPath();cx.moveTo(r,r);cx.arc(r,r,r-6,a0,a0+seg);cx.closePath();cx.fillStyle=cols[i%cols.length];cx.fill();cx.strokeStyle='#0b1020';cx.lineWidth=2;cx.stroke();
+  cx.save();cx.translate(r,r);cx.rotate(a0+seg/2);cx.fillStyle='#0b1020';cx.font='bold '+Math.max(12,Math.min(24,300/n))+'px Inter,sans-serif';cx.textAlign='right';cx.fillText((it[i]||'Add entries').slice(0,22),r-24,8);cx.restore();}
+ cx.beginPath();cx.arc(r,r,34,0,2*Math.PI);cx.fillStyle='#0b1020';cx.fill();cx.fillStyle='#c6f432';cx.font='bold 26px Inter';cx.textAlign='center';cx.fillText('⚡',r,r+9);}
+draw();document.getElementById('wh-list').addEventListener('input',draw);
+document.getElementById('wh-shuffle').onclick=function(){var it=items();for(var i=it.length-1;i>0;i--){var j=rnd(i+1),t=it[i];it[i]=it[j];it[j]=t;}document.getElementById('wh-list').value=it.join('\n');draw();};
+document.getElementById('wh-spin').onclick=function(){var it=items();if(spinning||it.length<2)return;spinning=true;
+ var n=it.length,seg=2*Math.PI/n,win=rnd(n),target=2*Math.PI*(6+rnd(3))-(win*seg+seg/2)-((ang%(2*Math.PI))),start=ang,dur=5200,t0=performance.now();
+ target+=ang;
+ (function step(t){var p=Math.min((t-t0)/dur,1),e=1-Math.pow(1-p,4);ang=start+(target-start)*e;draw();if(p<1)requestAnimationFrame(step);else{spinning=false;
+  document.getElementById('wh-res').textContent=it[win];var li=document.createElement('li');li.textContent=it[win]+' — '+new Date().toLocaleTimeString();document.getElementById('wh-hist').prepend(li);
+  if(document.getElementById('wh-rm').checked){it.splice(win,1);document.getElementById('wh-list').value=it.join('\n');setTimeout(draw,900);}}})(t0);};
+});</script>{% endraw %}

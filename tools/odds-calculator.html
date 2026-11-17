@@ -1,0 +1,22 @@
+---
+layout: default
+title: "Odds of Winning Calculator for Sweepstakes & Giveaways | WinFast.com"
+description: "Calculate sweepstakes and giveaway odds: total entries, number of prizes and your entries give your exact probability of winning at least one prize, plus portfolio odds."
+canonical: "https://winfast.com/tools/odds-calculator.html"
+root: "../"
+og_type: website
+---
+{% raw %}<section class="page-head"><div class="wrap"><div class="crumbs"><a href="../index.html">Home</a> / <a href="index.html">Tools</a></div><span class="eyebrow">Free tool · no sign-up</span><h1>Odds of Winning Calculator</h1><p>See your real probability of winning — per promotion and across everything you enter — before you spend time entering.</p></div></section><section class="section"><div class="wrap"><div class="tool"><div class="card form"><h3>Single promotion</h3>
+<div class="field"><label for="oc-N">Estimated total entries (everyone)</label><input id="oc-N" type="number" value="50000" min="1"></div>
+<div class="row"><div class="field"><label for="oc-w">Number of prizes</label><input id="oc-w" type="number" value="10" min="1"></div><div class="field"><label for="oc-k">Your entries</label><input id="oc-k" type="number" value="30" min="1"></div></div>
+<h3 style="margin-top:8px">Your portfolio</h3><div class="row"><div class="field"><label for="oc-m">Similar promotions you enter / year</label><input id="oc-m" type="number" value="200" min="1"></div><div class="field"><label for="oc-v">Average prize value ($)</label><input id="oc-v" type="number" value="150" min="0"></div></div></div>
+<div class="card"><div class="grid g2"><div class="stat"><b id="oc-p">—</b><span>Chance to win (this promo)</span></div><div class="stat"><b id="oc-1in">—</b><span>Roughly 1 in…</span></div><div class="stat"><b id="oc-y">—</b><span>Chance of ≥1 win per year</span></div><div class="stat"><b id="oc-e">—</b><span>Expected wins / year</span></div></div><p class="muted" id="oc-ev" style="margin-top:14px"></p></div></div><div class="ad-zone"></div><h2 style="margin-top:40px">FAQ</h2><details><summary>How are the odds calculated?</summary><p>For a random draw of W prizes from N total entries where you hold K entries (one prize per entry drawn without replacement), your chance of winning nothing is the product of (N−K−i)/(N−i) for i from 0 to W−1. We show one minus that.</p></details><details><summary>How do I estimate total entries?</summary><p>Some rules disclose entry counts after past draws; social giveaways show comment counts. When unknown, compare a pessimistic and an optimistic estimate.</p></details><details><summary>Do more entries really help?</summary><p>Yes — linearly for small odds. Doubling your valid entries roughly doubles your chance in large promotions.</p></details><div class="leadbox" style="margin-top:40px"><div><span class="eyebrow">For brands &amp; creators</span><h2 style="color:#fff">Running a giveaway? Let us fill it with real entrants.</h2><p>Feature your promotion to WinFast readers and Win Alerts subscribers, or let our team run the whole campaign — rules, landing page, fair draw and winner follow-up.</p></div><div class="center"><a class="btn btn-lime" href="../promote.html">See promotion packages →</a><p class="dim" style="margin-top:10px;font-size:.9rem">Free listings available</p></div></div></div></section><script>document.addEventListener('DOMContentLoaded',function(){function calc(){var N=+document.getElementById('oc-N').value,w=+document.getElementById('oc-w').value,k=+document.getElementById('oc-k').value,m=+document.getElementById('oc-m').value,v=+document.getElementById('oc-v').value;
+ if(!(N>0&&w>0&&k>0))return; k=Math.min(k,N); w=Math.min(w,N); var q=1; for(var i=0;i<w;i++){q*=Math.max(0,(N-k-i))/(N-i); if(q===0)break;}
+ var p=1-q, py=1-Math.pow(1-p,m), ew=p*m;
+ document.getElementById('oc-p').textContent=(p*100<0.01?(p*100).toExponential(2):(p*100).toFixed(3))+'%';
+ document.getElementById('oc-1in').textContent=p>0?Math.round(1/p).toLocaleString():'∞';
+ document.getElementById('oc-y').textContent=(py*100).toFixed(1)+'%';
+ document.getElementById('oc-e').textContent=ew.toFixed(2);
+ document.getElementById('oc-ev').textContent='Expected prize value per year ≈ $'+(ew*v).toFixed(0)+'. Increase it by choosing promotions with more prizes and fewer entrants, and by using every daily entry allowed.';}
+document.querySelectorAll('.tool input').forEach(function(i){i.addEventListener('input',calc);});calc();
+});</script>{% endraw %}
