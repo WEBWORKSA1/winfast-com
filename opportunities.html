@@ -1,0 +1,33 @@
+---
+layout: default
+title: "All Opportunities: Sweepstakes, Hackathons, Challenges & Scholarships | WinFast.com"
+description: "Search and filter free-to-enter sweepstakes, hackathons, prize challenges, scholarships and creative competitions. Live feed refreshed daily; expired listings hidden automatically."
+canonical: "https://winfast.com/opportunities.html"
+root: ""
+og_type: website
+---
+{% raw %}<section class="page-head"><div class="wrap"><div class="crumbs"><a href="index.html">Home</a> / Opportunities</div><span class="eyebrow">⚡ Directory</span><h1>Every opportunity, one fast search</h1><p>Filter by type, cost and region. Save with ☆ to build your tracker. Expired listings disappear automatically.</p></div></section><section class="section"><div class="wrap">
+<div class="filters"><div class="field"><label for="f-q">Search</label><input id="f-q" placeholder="Keyword, brand, prize, location…"></div>
+<div class="field"><label for="f-type">Type</label><select id="f-type"><option value="">All types</option><option value="sweepstakes">Sweepstakes</option><option value="hackathon">Hackathons</option><option value="challenge">Prize challenges</option><option value="scholarship">Scholarships</option><option value="creative">Creative</option></select></div>
+<div class="field"><label for="f-cost">Cost</label><select id="f-cost"><option value="">Any</option><option value="free">Free to enter</option></select></div>
+<div class="field"><label for="f-sort">Sort</label><select id="f-sort"><option value="deadline">Ending soonest</option><option value="az">A–Z</option><option value="daily">Today's rotation</option></select></div>
+<div class="field"><label for="f-saved">Show</label><select id="f-saved"><option value="">All</option><option value="saved">★ Saved only</option></select></div></div>
+<div class="chips" id="chips"></div><p class="muted" id="f-count"></p><div class="grid g3" id="f-grid"><div class="empty">Loading…</div></div>
+<div class="ad-zone"></div>
+<div class="card center" style="margin-top:30px"><h3>Know a great opportunity we're missing?</h3><p>Submit it free — we review every submission.</p><a class="btn btn-lime" href="submit.html">Submit an opportunity</a> <a class="btn btn-ghost" href="promote.html">Feature it (brands)</a></div></div></section><script>document.addEventListener('DOMContentLoaded',function(){
+var P=new URLSearchParams(location.search),q=document.getElementById('f-q'),ty=document.getElementById('f-type'),co=document.getElementById('f-cost'),so=document.getElementById('f-sort'),sv=document.getElementById('f-saved');
+q.value=P.get('q')||'';ty.value=P.get('type')||'';
+var chips=['Cash','Canada','USA','Online','Students','AI','Daily','Global'];document.getElementById('chips').innerHTML=chips.map(function(c){return '<button class="chip" data-chip="'+c+'">'+c+'</button>';}).join('');
+document.getElementById('chips').onclick=function(e){var b=e.target.closest('[data-chip]');if(!b)return;q.value=(q.value.toLowerCase()===b.dataset.chip.toLowerCase())?'':b.dataset.chip;run();};
+WF.loadOpps().then(function(all){WF._all=all;run();});
+function run(){var all=WF._all||[],s=q.value.trim().toLowerCase(),favs=WF.store.get('favs',[]);
+ var r=all.filter(function(o){if(ty.value&&o.type!==ty.value)return false;if(co.value==='free'&&o.cost!=='free')return false;if(sv.value==='saved'&&favs.indexOf(o.id)<0)return false;
+  if(!s)return true;return [o.title,o.org,o.summary,o.prize,o.region,o.type,o.frequency].join(' ').toLowerCase().indexOf(s)>-1;});
+ if(so.value==='deadline')r.sort(function(a,b){return (a.deadline?new Date(a.deadline):8.64e15)-(b.deadline?new Date(b.deadline):8.64e15);});
+ if(so.value==='az')r.sort(function(a,b){return a.title.localeCompare(b.title);});
+ if(so.value==='daily')r=WF.dailyPick(r,r.length);
+ document.getElementById('f-count').textContent=r.length+' opportunit'+(r.length===1?'y':'ies')+' found';
+ document.getElementById('f-grid').innerHTML=r.map(WF.card).join('')||'<div class="empty">No matches. Try another keyword or clear filters.</div>';
+ document.querySelectorAll('.chip').forEach(function(c){c.classList.toggle('on',c.dataset.chip.toLowerCase()===s);});
+ var u=new URLSearchParams();if(q.value)u.set('q',q.value);if(ty.value)u.set('type',ty.value);history.replaceState(null,'',location.pathname+(u.toString()?'?'+u:''));}
+q.addEventListener('input',run);[ty,co,so,sv].forEach(function(el){el.addEventListener('change',run);});});</script>{% endraw %}
