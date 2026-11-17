@@ -1,0 +1,3 @@
+# WinFast.com
+
+Initializing repository…
