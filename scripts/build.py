@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """WinFast.com static page generator.
 Run from repo root:  python3 scripts/build.py
-Edit page content in scripts/pages_*.py, then rebuild. Output is plain HTML (GitHub Pages ready).
+Edit page content in scripts/pages_*.py, then rebuild. Output: page bodies with Jekyll front matter +
+_layouts/default.html (shared chrome). GitHub Pages renders them natively on push.
 """
 import json, os, sys, html
 from datetime import date
@@ -75,6 +76,54 @@ def footer(root):
 <button class="btn btn-lime" type="submit">Get Win Alerts — free</button><div class="form-msg" role="status"></div></form></div></div>'''
 
 
+LAYOUT_ROOT = "{{ page.root }}"
+
+
+def write_layout():
+    """Shared chrome lives in one Jekyll layout (GitHub Pages builds it natively)."""
+    base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    r = LAYOUT_ROOT
+    doc = f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{{{ page.title | escape }}}}</title>
+<meta name="description" content="{{{{ page.description | escape }}}}">
+<link rel="canonical" href="{{{{ page.canonical }}}}">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#0b1020">
+<meta property="og:type" content="{{{{ page.og_type | default: 'website' }}}}"><meta property="og:site_name" content="WinFast.com">
+<meta property="og:title" content="{{{{ page.title | escape }}}}"><meta property="og:description" content="{{{{ page.description | escape }}}}">
+<meta property="og:url" content="{{{{ page.canonical }}}}"><meta property="og:image" content="{SITE}/assets/img/og.svg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="google-adsense-account" content="ca-pub-6620975821265271">
+{ADSENSE}
+<link rel="icon" href="{r}assets/img/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="{r}manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{r}assets/css/style.css">
+</head>
+<body data-root="{r}" data-page="{{{{ page.path }}}}">
+{header(r, None)}
+<main id="main">
+{{{{ content }}}}
+</main>
+{footer(r)}
+<script src="{r}assets/js/app.js" defer></script>
+</body>
+</html>
+'''
+    os.makedirs(os.path.join(base, "_layouts"), exist_ok=True)
+    with open(os.path.join(base, "_layouts", "default.html"), "w", encoding="utf-8") as f:
+        f.write(doc)
+
+
+def _yaml(s):
+    return json.dumps(s, ensure_ascii=False)  # JSON strings are valid YAML scalars
+
+
 def page(path, title, desc, body, active=None, scripts="", schema=None, priority="0.7", og_type="website"):
     depth = path.count("/")
     root = "../" * depth
@@ -86,40 +135,9 @@ def page(path, title, desc, body, active=None, scripts="", schema=None, priority
         ld += f'<script type="application/ld+json">{json.dumps(base_ld)}</script>'
     if schema:
         ld += f'<script type="application/ld+json">{json.dumps(schema)}</script>'
-    doc = f'''<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{html.escape(title)}</title>
-<meta name="description" content="{html.escape(desc)}">
-<link rel="canonical" href="{url}">
-<meta name="robots" content="index,follow,max-image-preview:large">
-<meta name="theme-color" content="#0b1020">
-<meta property="og:type" content="{og_type}"><meta property="og:site_name" content="WinFast.com">
-<meta property="og:title" content="{html.escape(title)}"><meta property="og:description" content="{html.escape(desc)}">
-<meta property="og:url" content="{url}"><meta property="og:image" content="{SITE}/assets/img/og.svg">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="google-adsense-account" content="ca-pub-6620975821265271">
-{ADSENSE}
-<link rel="icon" href="{root}assets/img/favicon.svg" type="image/svg+xml">
-<link rel="manifest" href="{root}manifest.webmanifest">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{root}assets/css/style.css">
-{ld}
-</head>
-<body data-root="{root}">
-{header(root, active or path)}
-<main id="main">
-{body}
-</main>
-{footer(root)}
-<script src="{root}assets/js/app.js" defer></script>
-{scripts}
-</body>
-</html>
-'''
+    fm = (f"---\nlayout: default\ntitle: {_yaml(title)}\ndescription: {_yaml(desc)}\ncanonical: {_yaml(url)}\n"
+          f"root: {_yaml(root)}\nog_type: {og_type}\n---\n")
+    doc = fm + "{% raw %}" + body + ld + scripts + "{% endraw %}\n"
     out = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), path)
     os.makedirs(os.path.dirname(out), exist_ok=True)
     with open(out, "w", encoding="utf-8") as f:
@@ -150,4 +168,5 @@ if __name__ == "__main__":
     pages_tools.build(page, head, TOOLS)
     pages_main.build(page, head, TOOLS, pages_guides.GUIDES)
     write_sitemap()
+    write_layout()
     print(f"Built {len(PAGES)} pages")

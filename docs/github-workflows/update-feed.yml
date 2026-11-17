@@ -1,0 +1,40 @@
+# Copy this file to .github/workflows/update-feed.yml (GitHub web UI: Add file > Create new file)
+# to enable the daily self-updating hackathon feed.
+name: Refresh opportunity feed
+
+on:
+  schedule:
+    - cron: "17 5 * * *"   # daily, 05:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: feed
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Update feed + sitemap
+        run: node scripts/update-feed.mjs
+      - name: Commit if changed
+        run: |
+          if git diff --quiet; then echo "No changes"; exit 0; fi
+          git config user.name "winfast-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/feed.json sitemap.xml
+          git commit -m "chore: daily feed refresh"
+          for i in 1 2 3; do git pull --rebase origin main && git push && break; sleep 5; done
+      - name: Request Pages rebuild
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X POST "repos/${{ github.repository }}/pages/builds" || true
