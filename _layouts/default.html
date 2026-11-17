@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{ page.title | escape }}</title>
+<meta name="description" content="{{ page.description | escape }}">
+<link rel="canonical" href="{{ page.canonical }}">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#0b1020">
+<meta property="og:type" content="{{ page.og_type | default: 'website' }}"><meta property="og:site_name" content="WinFast.com">
+<meta property="og:title" content="{{ page.title | escape }}"><meta property="og:description" content="{{ page.description | escape }}">
+<meta property="og:url" content="{{ page.canonical }}"><meta property="og:image" content="https://winfast.com/assets/img/og.svg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="google-adsense-account" content="ca-pub-6620975821265271">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6620975821265271" crossorigin="anonymous"></script>
+<link rel="icon" href="{{ page.root }}assets/img/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="{{ page.root }}manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ page.root }}assets/css/style.css">
+</head>
+<body data-root="{{ page.root }}" data-page="{{ page.path }}">
+<a class="skip" href="#main">Skip to content</a>
+<div class="interest-bar"><a href="https://web.works/contact" target="_blank" rel="noopener">📩 Contact, if you are interested in this website/domain name/Sponsorship/Advertisement/Partnership</a></div>
+<header class="site-header"><div class="wrap nav">
+<a class="brand" href="{{ page.root }}index.html" aria-label="WinFast.com home"><span class="mark"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#0b1020" d="M13.5 2 4 13.6h6.3L9 22l10-12.4h-6.4z"/></svg></span><span>WinFast<small>.com</small></span></a>
+<button class="icon-btn burger" aria-label="Open menu" aria-expanded="false">☰</button>
+<ul class="menu">
+<li><a href="{{ page.root }}opportunities.html">Opportunities</a></li>
+<li><button aria-haspopup="true">Tools ▾</button><ul class="dropdown"><li><a href="{{ page.root }}tools/giveaway-picker.html">🎯 Giveaway Winner Picker</a></li><li><a href="{{ page.root }}tools/spin-wheel.html">🎡 Spin the Wheel</a></li><li><a href="{{ page.root }}tools/random-number.html">🔢 Random Number Generator</a></li><li><a href="{{ page.root }}tools/odds-calculator.html">📊 Odds of Winning Calculator</a></li><li><a href="{{ page.root }}tools/prize-tax-estimator.html">🧾 Prize Tax Estimator</a></li><li><a href="{{ page.root }}tools/entry-tracker.html">🗂️ Entry Tracker</a></li><li><a href="{{ page.root }}tools/rules-generator.html">📜 Official Rules Generator</a></li><li><a href="{{ page.root }}tools/deadline-countdown.html">⏱️ Deadline Countdown & Calendar</a></li><li><a href="{{ page.root }}tools/index.html">All tools →</a></li></ul></li>
+<li><button aria-haspopup="true">Learn ▾</button><ul class="dropdown"><li><a href="{{ page.root }}guides/index.html">📚 Guides</a></li><li><a href="{{ page.root }}videos.html">▶️ Video hub</a></li><li><a href="{{ page.root }}playbook.html">⚡ Fast-Win Playbook</a></li><li><a href="{{ page.root }}faq.html">❓ FAQ</a></li></ul></li>
+<li><a href="{{ page.root }}contests.html">Contests</a></li>
+<li><a href="{{ page.root }}promote.html">For Brands</a></li>
+<li><a href="{{ page.root }}support.html">Support</a></li>
+<li><a class="btn btn-lime" href="{{ page.root }}alerts.html">Get Win Alerts</a></li>
+<li><button class="icon-btn theme-toggle" aria-label="Toggle light/dark theme">🌓</button></li>
+</ul></div></header>
+<main id="main">
+{{ content }}
+</main>
+<footer class="site-footer"><div class="wrap">
+<div class="foot-grid">
+<div><a class="brand" href="{{ page.root }}index.html"><span class="mark"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#0b1020" d="M13.5 2 4 13.6h6.3L9 22l10-12.4h-6.4z"/></svg></span><span>WinFast<small>.com</small></span></a>
+<p class="muted" style="margin-top:12px">The fast lane to free-to-enter sweepstakes, contests, hackathons, prize challenges and scholarships — plus fair, free giveaway tools.</p>
+<a class="btn btn-lime btn-sm" href="{{ page.root }}alerts.html">Get weekly Win Alerts</a></div>
+<div><h4>Explore</h4><ul><li><a href="{{ page.root }}opportunities.html">All opportunities</a></li><li><a href="{{ page.root }}opportunities.html?type=hackathon">Hackathons</a></li><li><a href="{{ page.root }}opportunities.html?type=scholarship">Scholarships</a></li><li><a href="{{ page.root }}guides/index.html">Guides</a></li><li><a href="{{ page.root }}videos.html">Videos</a></li><li><a href="{{ page.root }}contests.html">WinFast Contests</a></li></ul></div>
+<div><h4>Tools</h4><ul><li><a href="{{ page.root }}tools/giveaway-picker.html">Giveaway Winner Picker</a></li><li><a href="{{ page.root }}tools/spin-wheel.html">Spin the Wheel</a></li><li><a href="{{ page.root }}tools/random-number.html">Random Number Generator</a></li><li><a href="{{ page.root }}tools/odds-calculator.html">Odds of Winning Calculator</a></li><li><a href="{{ page.root }}tools/prize-tax-estimator.html">Prize Tax Estimator</a></li><li><a href="{{ page.root }}tools/entry-tracker.html">Entry Tracker</a></li></ul></div>
+<div><h4>Company</h4><ul><li><a href="{{ page.root }}about.html">About</a></li><li><a href="{{ page.root }}promote.html">Promote a contest</a></li><li><a href="{{ page.root }}advertise.html">Advertise &amp; partner</a></li><li><a href="{{ page.root }}careers.html">Careers</a></li><li><a href="{{ page.root }}support.html">Donate / Support</a></li><li><a href="{{ page.root }}submit.html">Submit an opportunity</a></li><li><a href="{{ page.root }}contact.html">Contact</a></li></ul></div>
+<div><h4>Legal</h4><ul><li><a href="{{ page.root }}privacy.html">Privacy Policy</a></li><li><a href="{{ page.root }}terms.html">Terms of Use</a></li><li><a href="{{ page.root }}disclaimer.html">Disclaimer &amp; Trademark</a></li><li><a href="{{ page.root }}cookies.html">Cookie Policy</a></li><li><a href="{{ page.root }}editorial-policy.html">Editorial Policy</a></li><li><a href="{{ page.root }}contest-rules.html">Official Contest Rules</a></li><li><a href="{{ page.root }}sitemap.html">Sitemap</a></li></ul></div>
+</div>
+<div class="legal-note">
+<p><strong>Trademark &amp; copyright disclosure:</strong> “WinFast.com” is used here only as a descriptive domain name meaning “win fast”. This website is independent and is not affiliated with, endorsed by, or sponsored by Leadtek Research Inc. or any owner of the “WinFast” trademark or WinFast-branded products. All third-party names, logos and trademarks belong to their respective owners and are used for identification only. Listings link to official sponsor pages; we do not run, guarantee or judge third-party promotions. Site content © <span class="year"></span> WinFast.com. All rights reserved. <a href="{{ page.root }}disclaimer.html">Full disclaimer</a>.</p>
+<p>No purchase is ever necessary to enter a legitimate sweepstakes. Void where prohibited. WinFast.com does not list gambling, betting, lottery-ticket sales or “sweepstakes casino” sites.</p>
+</div></div></footer>
+<div class="sticky-cta" role="complementary"><p>⚡ Get the best free-to-enter wins every week</p><a class="btn btn-lime btn-sm" href="{{ page.root }}alerts.html">Send me Win Alerts</a><button class="x" aria-label="Dismiss">✕</button></div>
+<div class="consent" role="dialog" aria-label="Cookie notice"><p>We use cookies to run this site, measure traffic and show ads through Google AdSense. Google and its partners may use cookies to personalise ads. See our <a href="{{ page.root }}cookies.html">Cookie Policy</a>.</p><div style="display:flex;gap:8px"><button class="btn btn-lime btn-sm" data-consent="all">Accept</button><button class="btn btn-ghost btn-sm" data-consent="essential">Essential only</button></div></div>
+<div class="modal" id="exit-modal" aria-hidden="true"><div class="box"><button class="close" aria-label="Close">×</button>
+<span class="eyebrow">Before you go</span><h2>Never miss a fast win</h2><p class="muted">One short email a week: the newest free-to-enter sweepstakes, hackathons and prize challenges — plus deadlines ending soon.</p>
+<form class="wf-form form" data-subject="Exit-intent Win Alerts signup" data-lead="1" data-autoresponse="Thanks for joining WinFast Win Alerts! Your free Fast-Win Playbook is here: https://winfast.com/playbook.html — your first alert arrives this week." data-success="You're in! Check your inbox for the Fast-Win Playbook.">
+<div class="hp"><input name="_hp" tabindex="-1" autocomplete="off"></div>
+<input type="email" name="email" placeholder="you@email.com" required aria-label="Email">
+<select name="Interest" aria-label="Main interest"><option>Everything</option><option>Sweepstakes &amp; giveaways</option><option>Hackathons &amp; tech challenges</option><option>Scholarships</option><option>Creative competitions</option></select>
+<label class="check"><input type="checkbox" name="Consent" value="Yes" required> I agree to receive emails and accept the <a href="{{ page.root }}privacy.html">Privacy Policy</a>. Unsubscribe anytime.</label>
+<button class="btn btn-lime" type="submit">Get Win Alerts — free</button><div class="form-msg" role="status"></div></form></div></div>
+<script src="{{ page.root }}assets/js/app.js" defer></script>
+</body>
+</html>
