@@ -1,0 +1,14 @@
+{
+  "note": "Edit this file to launch/close contest rounds. status: upcoming | open | closed | archived. The first non-archived round is shown on contests.html.",
+  "rounds": [
+    {
+      "title": "Fast-Win Challenge #1 — The 60-Second Winning Tip",
+      "status": "upcoming",
+      "brief": "Create a 60-second video, graphic or 300-word post teaching one practical, legitimate tip that helps people win more contests, hackathons or scholarships.",
+      "prize": "Prize pool funded by sponsors & supporters — announced at launch. Want to sponsor it? See Advertise & Partner.",
+      "deadline": null,
+      "criteria": ["Usefulness (40%)", "Clarity (30%)", "Creativity (30%)"],
+      "winners": []
+    }
+  ]
+}
